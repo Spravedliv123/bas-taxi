@@ -23,6 +23,7 @@ import { authorizeRoles } from "../middlewares/role.middleware.js";
 import { validateMiddleware } from "../middlewares/validate.middleware.js";
 import { rejectDriverSchema } from "../validators/reject-driver.js";
 import tariffRouter from "./tariff.route.js";
+import { validateInputMiddleware } from "../middlewares/validateInput.middleware.js";
 
 const router = Router();
 
@@ -131,6 +132,9 @@ router.get(
   "/users",
   authMiddleware,
   authorizeRoles(["superadmin", "admin", "moderator"]),
+  validateInputMiddleware({
+    "query": ["page", "limit"]
+  }),
   getUsers
 );
 
@@ -189,6 +193,9 @@ router.get(
   "/drivers",
   authMiddleware,
   authorizeRoles(["superadmin", "admin", "moderator"]),
+  validateInputMiddleware({
+    "query": ["page", "limit"]
+  }),
   getDrivers
 );
 
@@ -450,6 +457,9 @@ router.post(
   authMiddleware,
   authorizeRoles(["superadmin", "admin", "moderator"]),
   validateMiddleware(rejectDriverSchema),
+  validateInputMiddleware({
+    "body": ["reason"]
+  }),
   rejectDriver
 );
 //router.post('/reject-driver/:requestId', authMiddleware, authorizeRoles('admin', 'moderator'), validateMiddleware(rejectDriverSchema), rejectDriver);
@@ -657,6 +667,9 @@ router.get(
   "/rides",
   authMiddleware,
   authorizeRoles(["superadmin", "admin"]),
+  validateInputMiddleware({
+    "query": ["startTime", "endTime"]
+  }),
   getRidesByTimeRange
 );
 
@@ -797,6 +810,9 @@ router.post(
   "/user/:userId/block",
   authMiddleware,
   authorizeRoles(["superadmin", "admin"]),
+  validateInputMiddleware({
+    "body": ["reason"]
+  }),
   blockUserViaGateway
 );
 
@@ -856,6 +872,9 @@ router.post(
   "/driver/:driverId/block",
   authMiddleware,
   authorizeRoles(["superadmin", "admin"]),
+  validateInputMiddleware({
+    "body": ["reason"]
+  }),
   blockDriverViaGateway
 );
 

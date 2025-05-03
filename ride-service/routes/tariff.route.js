@@ -16,6 +16,7 @@ import {
   hourAdjustmentSchema,
   monthAdjustmentSchema,
 } from "../validators/tariff-adjustments.validator.js";
+import { validateInputMiddleware } from "../middlewares/validateInput.middleware.js";
 
 const router = Router();
 
@@ -72,6 +73,9 @@ router.put(
   "/hour",
   authMiddleware,
   validateMiddleware(hourAdjustmentSchema),
+  validateInputMiddleware({
+    "body": ["cityId", "carClassId", "hour", "percent", "reason"]
+  }),
   async (req, res) => {
     try {
       const { cityId, carClassId, hour, percent, reason } = req.body;
@@ -155,6 +159,9 @@ router.put(
   "/month",
   authMiddleware,
   validateMiddleware(monthAdjustmentSchema),
+  validateInputMiddleware({
+    "body": ["cityId", "carClassId", "month", "percent", "reason"]
+  }),
   async (req, res) => {
     try {
       const { cityId, carClassId, month, percent, reason } = req.body;
@@ -244,6 +251,9 @@ router.post(
   "/holiday",
   authMiddleware,
   validateMiddleware(holidayAdjustmentSchema),
+  validateInputMiddleware({
+    "body": ["cityId", "carClassId", "month", "day", "percent", "reason"]
+  }),
   async (req, res) => {
     try {
       const { cityId, carClassId, month, day, percent, reason } = req.body;
@@ -333,6 +343,9 @@ router.put(
   "/holiday",
   authMiddleware,
   validateMiddleware(holidayAdjustmentSchema),
+  validateInputMiddleware({
+    "body": ["cityId", "carClassId", "month", "day", "percent", "reason"]
+  }),
   async (req, res) => {
     try {
       const { cityId, carClassId, month, day, percent, reason } = req.body;
@@ -418,6 +431,9 @@ router.delete(
   "/holiday",
   authMiddleware,
   validateMiddleware(deleteHolidaySchema),
+  validateInputMiddleware({
+    "body": ["cityId", "carClassId", "month", "day", "reason"]
+  }),
   async (req, res) => {
     try {
       const { cityId, carClassId, month, day, reason } = req.body;
@@ -502,6 +518,9 @@ router.put(
   "/base",
   authMiddleware,
   validateMiddleware(baseTariffSchema),
+  validateInputMiddleware({
+    "body": ["cityId", "carClassId", "baseFare", "costPerKm", "costPerMinute", "reason"]
+  }),
   async (req, res) => {
     try {
       const { cityId, carClassId, baseFare, costPerKm, costPerMinute, reason } =

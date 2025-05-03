@@ -187,7 +187,8 @@ router.post(
   validateInputMiddleware({
     "body": ["rideId"]
   }),
-  acceptRideHandler);
+  acceptRideHandler
+);
 
 /**
  * @swagger
@@ -213,10 +214,8 @@ router.post(
 router.post(
   "/:rideId/start", 
   authMiddleware(["driver"]), 
-  validateInputMiddleware({
-    "params": ["rideId"]
-  }),
-  startRideHandler);
+  startRideHandler
+);
 
 /**
  * @swagger
@@ -242,9 +241,6 @@ router.post(
 router.post(
   "/:rideId/complete",
   authMiddleware(["driver"]),
-  validateInputMiddleware({
-    "params": ["rideId"]
-  }),
   completeRideHandler
 );
 
@@ -283,7 +279,6 @@ router.post(
   "/:rideId/cancel",
   authMiddleware(["passenger"]),
   validateInputMiddleware({
-    "params": ["rideId"],
     "body": ["cancellationReason"]
   }),
   cancelRideHandler
@@ -313,10 +308,8 @@ router.post(
 router.post(
   "/:rideId/onsite", 
   authMiddleware(["driver"]), 
-  validateInputMiddleware({
-    "params": ["rideId"]
-  }),
-  onsiteRideHandler);
+  onsiteRideHandler
+);
 
 /**
  * @swagger
@@ -342,9 +335,6 @@ router.post(
 router.post(
   "/:rideId/timeout-cancel",
   authMiddleware(["driver"]),
-  validateInputMiddleware({
-    "params": ["rideId"]
-  }),
   cancelRideIfPassengerNotArrivedHandler
 );
 
@@ -516,7 +506,8 @@ router.post(
   validateInputMiddleware({
     "body": ["latitude", "longitude"]
   }),
-  activateLineHandler);
+  activateLineHandler
+);
 
 /**
  * @swagger
@@ -587,12 +578,7 @@ router.get("/car-classes", getCarClassesHandler);
  *       500:
  *         description: Не удалось получить данные о поездке
  */
-router.get(
-  "/:rideId", 
-  validateInputMiddleware({
-    "params": ["rideId"]
-  }),
-  getRideDetailsHandler);
+router.get("/:rideId", getRideDetailsHandler);
 
 /**
  * @swagger
@@ -648,12 +634,7 @@ router.get(
  *       500:
  *         description: Не удалось получить данные о водителе
  */
-router.get(
-  "/driver/:driverId", 
-  validateInputMiddleware({
-    "params": ["driverId"]
-  }),
-  getDriverDetailsHandler);
+router.get("/driver/:driverId", getDriverDetailsHandler);
 
 /**
  * @swagger
@@ -681,9 +662,6 @@ router.get(
 router.get(
   "/driver/:driverId/rides",
   authMiddleware(["admin"]),
-  validateInputMiddleware({
-    "params": ["driverId"]
-  }),
   getDriverRidesHandler
 );
 
@@ -713,9 +691,6 @@ router.get(
 router.get(
   "/user/:userId/rides",
   authMiddleware(["admin"]),
-  validateInputMiddleware({
-    "params": ["userId"]
-  }),
   getUserRidesHandler
 );
 
@@ -753,7 +728,8 @@ router.get(
   validateInputMiddleware({
     "query": ["startTime", "endTime"]
   }),
-  getRidesByTimeRange);
+  getRidesByTimeRange
+);
 
 /**
  * @swagger
@@ -898,12 +874,7 @@ router.post("/tariffs", createTariffHandler);
  *       500:
  *         description: Ошибка сервера
  */
-router.get(
-  "/tariffs/:cityId", 
-  validateInputMiddleware({
-    "params": ["cityId"]
-  }),
-  getTariffHandler);
+router.get("/tariffs/:cityId", getTariffHandler);
 
 /**
  * @swagger
@@ -947,7 +918,8 @@ router.put(
   validateInputMiddleware({
     "body": ["cityId", "carClassId", "baseFare", "costPerKm", "costPerMinute", "reason"]
   }),
-  updateBaseTariffHandler);
+  updateBaseTariffHandler
+);
 
 /**
  * @swagger
@@ -1032,7 +1004,8 @@ router.delete(
   validateInputMiddleware({
     "body": ["cityId", "carClassId", "hour", "reason"]
   }),
-  deleteHourAdjustmentHandler);
+  deleteHourAdjustmentHandler
+);
 
 /**
  * @swagger
@@ -1117,7 +1090,8 @@ router.delete(
   validateInputMiddleware({
     "body": ["cityId", "carClassId", "month", "reason"]
   }),
-  deleteMonthAdjustmentHandler);
+  deleteMonthAdjustmentHandler
+);
 
 /**
  * @swagger
@@ -1167,7 +1141,8 @@ router.post(
   validateInputMiddleware({
     "body": ["cityId", "carClassId", "month", "day", "percent", "reason"]
   }),
-  addHolidayHandler);
+  addHolidayHandler
+);
 
 /**
  * @swagger
@@ -1215,7 +1190,8 @@ router.put(
   validateInputMiddleware({
     "body": ["cityId", "carClassId", "month", "day", "percent", "reason"]
   }),
-  updateHolidayHandler);
+  updateHolidayHandler
+);
 
 /**
  * @swagger
@@ -1260,7 +1236,8 @@ router.delete(
   validateInputMiddleware({
     "body": ["cityId", "carClassId", "month", "day", "reason"]
   }),
-  deleteHolidayHandler);
+  deleteHolidayHandler
+);
 
 /**
  * @swagger

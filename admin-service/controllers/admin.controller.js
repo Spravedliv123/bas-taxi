@@ -10,8 +10,8 @@ dotenv.config();
 const API_GATEWAY_URL = process.env.API_GATEWAY_URL;
 
 export const getUsers = async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 50;
+  const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
 
   if (page < 1 || limit < 1 || limit > 100) {
     return res.status(400).json({
@@ -565,8 +565,8 @@ export const unblockDriverViaGateway = async (req, res) => {
 };
 
 export const getDrivers = async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 50;
+  const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
 
   if (page < 1 || limit < 1 || limit > 100) {
     return res.status(400).json({

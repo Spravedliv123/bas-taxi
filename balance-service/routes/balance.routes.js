@@ -9,6 +9,7 @@ import {
   topUpBalance,
 } from "../controllers/balance.controller.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
+import { validateInputMiddleware } from "../middlewares/validateInput.middleware.js";
 
 const router = express.Router();
 
@@ -68,7 +69,14 @@ router.get("/health", (req, res) => {
  *       500:
  *         description: Ошибка сервера
  */
-router.post("/payment", authMiddleware(["passenger"]), initiatePayment);
+router.post(
+  "/payment", 
+  authMiddleware(["passenger"]), 
+  validateInputMiddleware({
+    "body": ["rideId", "amount"]
+  }),
+  initiatePayment
+);
 
 /**
  * @swagger
@@ -106,7 +114,14 @@ router.post("/payment", authMiddleware(["passenger"]), initiatePayment);
  *       500:
  *         description: Ошибка сервера
  */
-router.post("/top-up", authMiddleware(["driver"]), topUpBalance);
+router.post(
+  "/top-up", 
+  authMiddleware(["driver"]), 
+  validateInputMiddleware({
+    "body": ["amount"]
+  }),
+  topUpBalance
+);
 
 /**
  * @swagger
@@ -147,7 +162,14 @@ router.post("/top-up", authMiddleware(["driver"]), topUpBalance);
  *         description: Ошибка сервера
  */
 
-router.post("/deduct", authMiddleware(["driver"]), deductBalance);
+router.post(
+  "/deduct", 
+  authMiddleware(["driver"]), 
+  validateInputMiddleware({
+    "body": ["amount"]
+  }),
+  deductBalance
+);
 
 /**
  * @swagger
@@ -181,7 +203,13 @@ router.post("/deduct", authMiddleware(["driver"]), deductBalance);
  *         description: Ошибка сервера
  */
 
-router.post("/internal/deduct", deductBalance);
+router.post(
+  "/internal/deduct", 
+  validateInputMiddleware({
+    "body": ["amount"]
+  }),
+  deductBalance
+);
 
 /**
  * @swagger
@@ -220,7 +248,11 @@ router.post("/internal/deduct", deductBalance);
  *       500:
  *         description: Ошибка сервера
  */
-router.get("/history", authMiddleware(["driver"]), getBalanceHistory);
+router.get(
+  "/history", 
+  authMiddleware(["driver"]), 
+  getBalanceHistory
+);
 
 /**
  * @swagger
@@ -244,7 +276,11 @@ router.get("/history", authMiddleware(["driver"]), getBalanceHistory);
  *       500:
  *         description: Ошибка сервера
  */
-router.get("/", authMiddleware(["driver"]), getBalance);
+router.get(
+  "/", 
+  authMiddleware(["driver"]), 
+  getBalance
+);
 
 /**
  * @swagger
@@ -275,7 +311,11 @@ router.get("/", authMiddleware(["driver"]), getBalance);
  *       500:
  *         description: Ошибка сервера
  */
-router.get("/statistics", authMiddleware(["driver"]), getStatistics);
+router.get(
+  "/statistics", 
+  authMiddleware(["driver"]), 
+  getStatistics
+);
 
 /**
  * @swagger

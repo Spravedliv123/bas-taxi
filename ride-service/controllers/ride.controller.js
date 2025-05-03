@@ -446,6 +446,7 @@ export const getDriverDetailsHandler = async (req, res) => {
 export const getRideDetailsHandler = async (req, res) => {
   try {
     const { rideId } = req.params;
+    const userOrDriverId = req.user.userId ?? req.user.driverId;
     const correlationId = req.correlationId;
 
     if (!rideId) {
@@ -455,7 +456,7 @@ export const getRideDetailsHandler = async (req, res) => {
       });
     }
 
-    const rideDetails = await getRideDetails(rideId, correlationId);
+    const rideDetails = await getRideDetails(rideId, userOrDriverId, correlationId);
 
     if (!rideDetails) {
       return res.status(404).json({

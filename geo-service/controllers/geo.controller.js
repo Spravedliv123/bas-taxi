@@ -41,7 +41,7 @@ export const getCityByCoordinates = async (req, res) => {
         const { latitude, longitude } = req.body;
 
         if (!latitude || !longitude) {
-            return res.status(400).json({ error: 'Параметр "address" обязателен' });
+            return res.status(400).json({ error: 'Параметры "latitude" и "longitude" обязательны' });
         }
 
         const location = await googleMapsService.getCityByCoordinates(latitude, longitude);

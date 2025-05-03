@@ -109,6 +109,21 @@ export const requestRide = async (
       }
       let destinationName = destinationNameRes.address.split(",")[0];
 
+      const activeRides = await Ride.findAll({
+        where: {
+          passengerId: passengerId,
+          status: "pending",
+        },
+      });
+
+      if (!activeRides) {
+        throw new Error("Не удалось получить информацию об активных поездках");
+      }
+
+      if (activeRides.length !== 0) {
+        throw new Error("Для создания новой поездки, завершите текущую");
+      }
+
       const ride = await Ride.create(
         {
           passengerId,
@@ -1323,7 +1338,7 @@ export const getDriverDetails = async (driverId, correlationId) => {
   }
 };
 
-export const getRideDetails = async (rideId, correlationId) => {
+export const getRideDetails = async (rideId, userOrDriverId, correlationId) => {
   try {
     logger.info("Запрос деталей поездки", { rideId, correlationId });
 
@@ -1339,6 +1354,11 @@ export const getRideDetails = async (rideId, correlationId) => {
     logger.info("Получены детали поездки", { rideId, correlationId });
 
     const rideData = ride.get({ plain: true });
+
+    if (rideData.passengerId !== userOrDriverId && rideData.driverId !== userOrDriverId) {
+        throw new Error("Вы не являетесь участником этой поездки")
+    }
+    
     if (rideData.price) {
       rideData.price = rideData.price.toString();
     }

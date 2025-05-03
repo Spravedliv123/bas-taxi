@@ -1,6 +1,7 @@
   import express from 'express';
 import { addPaymentDetails, getPaymentDetails, deletePaymentDetails } from '../controllers/payment.controller.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { validateInputMiddleware } from '../middlewares/validateInput.middleware.js';
 
 const router = express.Router();
 
@@ -44,7 +45,14 @@ const router = express.Router();
  *       201:
  *         description: Реквизиты успешно добавлены
  */
-router.post('/', authMiddleware, addPaymentDetails);
+router.post(
+  '/', 
+  authMiddleware, 
+  validateInputMiddleware({
+    "body": ["cardNumber", "cardHolderName", "expirationDate", "cvc"]
+  }),
+  addPaymentDetails
+);
 
 /**
  * @swagger

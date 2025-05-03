@@ -138,7 +138,6 @@ export const getTariffs = async (req, res) => {
 export const deleteTariff = async (req, res) => {
   const { id } = req.params;
   const correlationId = req.headers["x-correlation-id"];
-  console.log("req user", req.user);
   const adminId = req.user.adminId;
 
   try {

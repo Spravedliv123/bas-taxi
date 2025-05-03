@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/auth.middleware');
+import { validateInputMiddleware } from '../middleware/validateInput.middleware';
 
 router.get('/get-qr-code', authMiddleware, async (req, res) => {
     try {
@@ -16,7 +17,9 @@ router.get('/get-qr-code', authMiddleware, async (req, res) => {
     }
 });
 
-router.post('/update-status', authMiddleware, async (req, res) => {
+router.post('/update-status', authMiddleware, validateInputMiddleware({
+    "body": ["status", "latitude", "longitude"]
+}), async (req, res) => {
     try {
         if (req.user.role !== 'driver') {
             return res.status(403).json({ message: 'Только водители могут менять статус' });

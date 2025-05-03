@@ -5,6 +5,7 @@ import { superAdminMiddleware } from "../middlewares/admin.guard.js";
 import validateMiddleware from "../middlewares/validate.middleware.js";
 import { createAdminSchema } from "../validators/admin.validator.js";
 import { adminLoginSchema } from "../validators/login.validator.js";
+import { validateInputMiddleware } from '../middlewares/validateInput.middleware.js';
 
 const router = express.Router();
 
@@ -88,7 +89,13 @@ const router = express.Router();
  *       403:
  *         description: Недостаточно прав (требуется роль superadmin)
  */
-router.post('/create', authMiddleware, superAdminMiddleware, validateMiddleware(createAdminSchema), createAdmin);
+router.post(
+    '/create', 
+    authMiddleware, 
+    superAdminMiddleware, 
+    validateMiddleware(createAdminSchema), 
+    createAdmin
+);
 
 /**
  * @swagger
@@ -140,7 +147,14 @@ router.post('/create', authMiddleware, superAdminMiddleware, validateMiddleware(
  *       401:
  *         description: Неверный email, пароль или код 2FA
  */
-router.post('/login', validateMiddleware(adminLoginSchema), loginAdmin);
+router.post(
+    '/login', 
+    validateMiddleware(adminLoginSchema), 
+    validateInputMiddleware({
+        "body": ["email", "password", "twoFactorToken"]
+    }),
+    loginAdmin
+);
 
 /**
  * @swagger

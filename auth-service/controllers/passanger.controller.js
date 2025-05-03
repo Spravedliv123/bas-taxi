@@ -519,8 +519,8 @@ export const getAllPassengers = async (req, res) => {
   );
 
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 50;
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
 
     if (page < 1 || limit < 1 || limit > 100) {
       logger.warn("getAllPassengers: Некорректные параметры пагинации", {

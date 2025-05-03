@@ -15,6 +15,7 @@ import logger from "../utils/logger.js";
 import { authenticate, authorize } from '../middlewares/auth.middleware.js';
 import { validateSchema } from '../middlewares/validate.middleware.js';
 import { registerDriverSchema, loginDriverSchema } from '../validators/driver.js';
+import { validateInputMiddleware } from '../middlewares/validateInput.middleware.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -326,6 +327,12 @@ router.post(
                     next();
             });
     },
+    validateInputMiddleware({
+        "body": [
+                "phoneNumber", "fullName", "address", "city", "technicalPassport",
+                "carBrand", "carModel", "licensePlate", "manufactureDate", "vinCode"
+                ]
+    }),
     registerDriver
 );
 
@@ -354,7 +361,13 @@ router.post(
  *       400:
  *         description: Ошибка валидации
  */
-router.post('/login', loginDriver);
+router.post(
+    '/login', 
+    validateInputMiddleware({
+        "body": ["phoneNumber"]
+    }),
+    loginDriver
+);
 
 /**
  * @swagger
@@ -384,7 +397,13 @@ router.post('/login', loginDriver);
  *       400:
  *         description: Ошибка валидации
  */
-router.post('/confirm', confirmDriverLogin);
+router.post(
+    '/confirm',
+    validateInputMiddleware({
+        "body": ["phoneNumber", "verificationCode"]
+    }),
+    confirmDriverLogin
+);
 
 /**
  * @swagger
@@ -505,7 +524,15 @@ router.delete('/delete', authenticate, deleteDriverProfile);
  *       403:
  *         description: Forbidden access
  */
-router.put('/:driverId/block', authenticate, authorize(['admin', 'superadmin']), blockDriver);
+router.put(
+    '/:driverId/block', 
+    authenticate, 
+    authorize(['admin', 'superadmin']), 
+    validateInputMiddleware({
+        "body": ["reason"]
+    }),
+    blockDriver
+);
 
 /**
  * @swagger

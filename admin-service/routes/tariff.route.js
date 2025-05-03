@@ -16,6 +16,7 @@ import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { authorizeRoles } from "../middlewares/role.middleware.js";
 import { validateMiddleware } from "../middlewares/validate.middleware.js";
 import { updateCostSchema } from "../validators/update-cost.validator.js";
+import { validateInputMiddleware } from "../middlewares/validateInput.middleware.js";
 
 const router = Router();
 
@@ -75,6 +76,9 @@ router.post(
   "/",
   authMiddleware,
   authorizeRoles(["superadmin", "admin"]),
+  validateInputMiddleware({
+    "body": ["cityId", "carClassId", "baseFare", "costPerKm", "costPerMinute"]
+  }),
   createTariff
 );
 
@@ -109,6 +113,9 @@ router.put(
   authMiddleware,
   authorizeRoles(["superadmin", "admin", "moderator"]),
   validateMiddleware(updateCostSchema),
+  validateInputMiddleware({
+    "body": ["cityId", "carClassId", "hour", "month", "updates"]
+  }),
   updateSettings
 );
 
@@ -196,6 +203,9 @@ router.put(
   "/hour",
   authMiddleware,
   authorizeRoles(["superadmin", "admin"]),
+  validateInputMiddleware({
+    "body": ["cityId", "carClassId", "hour", "percent", "multiplier"]
+  }),
   updateHourlyAdjustment
 );
 
@@ -249,6 +259,9 @@ router.post(
   "/hour",
   authMiddleware,
   authorizeRoles(["superadmin", "admin"]),
+  validateInputMiddleware({
+    "body": ["cityId", "carClassId", "hour", "multiplier"]
+  }),
   createHourlyAdjustment
 );
 
@@ -302,6 +315,9 @@ router.put(
   "/month",
   authMiddleware,
   authorizeRoles(["superadmin", "admin"]),
+  validateInputMiddleware({
+    "body": ["cityId", "carClassId", "month", "percent", "multiplier"]
+  }),
   updateMonthlyAdjustment
 );
 
@@ -365,6 +381,9 @@ router.post(
   "/holiday",
   authMiddleware,
   authorizeRoles(["superadmin", "admin"]),
+  validateInputMiddleware({
+    "body": ["cityId", "carClassId", "month", "day", "multiplier", "name"]
+  }),
   addHoliday
 );
 
@@ -420,6 +439,9 @@ router.delete(
   "/holiday",
   authMiddleware,
   authorizeRoles(["superadmin", "admin"]),
+  validateInputMiddleware({
+    "body": ["cityId", "carClassId", "month", "day"]
+  }),
   deleteHoliday
 );
 

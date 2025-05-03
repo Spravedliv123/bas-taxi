@@ -3,11 +3,33 @@ import { initiatePayment, topUpBalance, getBalanceHistory } from '../controllers
 import { authMiddleware } from '../middleware/auth.middleware.js';
 import { validateMiddleware } from '../middleware/validate.middleware.js';
 import { initiatePaymentSchema } from '../validators/payment.validator.js';
+import { validateInputMiddleware } from '../middleware/validateInput.middleware.js';
 
 const router = Router();
 
-router.post('/payments/initiate', authMiddleware, validateMiddleware(initiatePaymentSchema), initiatePayment);
-router.post('/balance/top-up', authMiddleware, topUpBalance);
-router.get('/balance/history', authMiddleware, getBalanceHistory);
+router.post(
+    '/payments/initiate', 
+    authMiddleware, 
+    validateMiddleware(initiatePaymentSchema), 
+    validateInputMiddleware({
+        "body": ["rideId", "amount"]
+    }),
+    initiatePayment
+);
+
+router.post(
+    '/balance/top-up', 
+    authMiddleware, 
+    validateInputMiddleware({
+        "body": ["amount"]
+    }),
+    topUpBalance
+);
+
+router.get(
+    '/balance/history', 
+    authMiddleware, 
+    getBalanceHistory
+);
 
 export default router;

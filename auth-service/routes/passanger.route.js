@@ -17,6 +17,7 @@ import {
     verifyTokenController
 } from '../controllers/passanger.controller.js';
 import { roleMiddleware } from "../middlewares/role.middleware.js";
+import { validateInputMiddleware } from '../middlewares/validateInput.middleware.js';
 
 const router = express.Router();
 
@@ -51,7 +52,13 @@ const router = express.Router();
  *       400:
  *         description: Ошибка валидации
  */
-router.post('/login', loginOrRegister);
+router.post(
+    '/login', 
+    validateInputMiddleware({
+        "body": ["phoneNumber", "fullName"]
+    }),
+    loginOrRegister
+);
 
 /**
  * @swagger
@@ -77,7 +84,13 @@ router.post('/login', loginOrRegister);
  *       400:
  *         description: Ошибка валидации
  */
-router.post('/web-login', loginOrRegisterWeb);
+router.post(
+    '/web-login', 
+    validateInputMiddleware({
+        "body": ["phoneNumber", "fullName"]
+    }),
+    loginOrRegisterWeb
+);
 
 /**
  * @swagger
@@ -118,7 +131,13 @@ router.post('/web-login', loginOrRegisterWeb);
  *       400:
  *         description: Ошибка валидации или неверный код
  */
-router.post('/confirm', confirmLogin);
+router.post(
+    '/confirm', 
+    validateInputMiddleware({
+        "body": ["phoneNumber", "verificationCode"]
+    }),
+    confirmLogin
+);
 
 /**
  * @swagger
@@ -179,7 +198,14 @@ router.get('/verify-token', verifyTokenController);
  *       400:
  *         description: Ошибка валидации или изменения номера
  */
-router.post('/change-phone', roleMiddleware(['passenger']), changePhone);
+router.post(
+    '/change-phone', 
+    roleMiddleware(['passenger']), 
+    validateInputMiddleware({
+        "body": ["phoneNumber"]
+    }),
+    changePhone
+);
 
 /**
  * @swagger
@@ -210,7 +236,14 @@ router.post('/change-phone', roleMiddleware(['passenger']), changePhone);
  *       400:
  *         description: Ошибка валидации или подтверждения номера
  */
-router.post('/confirm-phone', roleMiddleware(['passenger']), confirmPhone);
+router.post(
+    '/confirm-phone', 
+    roleMiddleware(['passenger']), 
+    validateInputMiddleware({
+        "body": ["phoneNumber", "verificationCode"]
+    }),
+    confirmPhone
+);
 
 /**
  * @swagger
@@ -273,7 +306,14 @@ router.post('/confirm-phone', roleMiddleware(['passenger']), confirmPhone);
  *       500:
  *         description: Ошибка сервера
  */
-router.post('/:userId/block', roleMiddleware(['admin', 'superadmin']), blockUser);
+router.post(
+    '/:userId/block', 
+    roleMiddleware(['admin', 'superadmin']), 
+    validateInputMiddleware({
+        "body": ["reason"]
+    }),
+    blockUser
+);
 
 /**
  * @swagger
@@ -323,7 +363,13 @@ router.post('/:userId/block', roleMiddleware(['admin', 'superadmin']), blockUser
  */
 router.post('/:userId/unblock', roleMiddleware(['admin', 'superadmin']), unblockUser);
 
-router.post('/delete', deleteUser);
+router.post(
+    '/delete', 
+    validateInputMiddleware({
+        "body": ["id", "reason"]
+    }),
+    deleteUser
+);
 
 /**
  * @swagger
@@ -407,11 +453,38 @@ router.post('/delete', deleteUser);
  *                   type: string
  *                   example: "Ошибка при изменении имени"
  */
-router.post('/change-name',roleMiddleware(['passenger']), changeUserName);
+router.post(
+    '/change-name', 
+    roleMiddleware(['passenger']), 
+    validateInputMiddleware({
+        "body": ["fullName"]
+    }),
+    changeUserName
+);
 
-router.post('/find-by-id', findUserById);
-router.post('/find-by-name', findUserByName);
-router.post('/find-by-phone', findUserByPhone);
+router.post(
+    '/find-by-id', 
+    validateInputMiddleware({
+        "body": ["id"]
+    }),
+    findUserById
+);
+
+router.post(
+    '/find-by-name', 
+    validateInputMiddleware({
+        "body": ["fullName"]
+    }),
+    findUserByName
+);
+
+router.post(
+    '/find-by-phone', 
+    validateInputMiddleware({
+        "body": ["phoneNumber"]
+    }),
+    findUserByPhone
+);
 
 /**
  * @swagger
@@ -447,6 +520,12 @@ router.post('/find-by-phone', findUserByPhone);
  */
 router.delete('/delete', roleMiddleware(['passenger']), deleteSelf);
 
-router.get('/', getAllPassengers);
+router.get(
+    '/', 
+    validateInputMiddleware({
+        "query": ["page", "limit"]
+    }),
+    getAllPassengers
+);
 
 export default router;

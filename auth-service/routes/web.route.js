@@ -1,5 +1,6 @@
 import express from "express";
-import {loginOrRegisterWeb} from "../controllers/passanger.controller.js";
+import { loginOrRegisterWeb } from "../controllers/passanger.controller.js";
+import { validateInputMiddleware } from "../middlewares/validateInput.middleware.js";
 
 const router = express.Router();
 
@@ -29,6 +30,12 @@ const router = express.Router();
  *         description: Ошибка валидации
  */
 
-router.post('/login', loginOrRegisterWeb);
+router.post(
+    '/login', 
+    validateInputMiddleware({
+        "body": ["phoneNumber", "fullName"]
+    }),
+    loginOrRegisterWeb
+);
 
 export default router;
