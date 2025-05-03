@@ -1,18 +1,28 @@
-import sequelize from './sequelize.js';
+import { Sequelize } from 'sequelize';
 import logger from './logger.js';
-import { initModels } from '../models/index.js';
 
-export const connectDB = async () => {
+const sequelize = new Sequelize(
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASSWORD, {
+    host: process.env.DB_HOST || 'mysql',
+    dialect: 'mysql',
+    logging: (msg) => logger.debug(msg),
+});
+
+const connectDB = async () => {
     try {
         await sequelize.authenticate();
         logger.info('Подключение к базе данных успешно');
 
-        initModels();
-
-        await sequelize.sync();
+        await sequelize.sync({ alter: true });
         logger.info('Таблицы синхронизированы');
     } catch (error) {
         logger.error('Ошибка подключения к базе данных', { error: error.message });
         process.exit(1);
     }
 };
+
+connectDB();
+
+export default sequelize;

@@ -7,5 +7,4 @@ const router = express.Router();
 router.get('/driver/:driverId', getReviewsByDriverHandler);
 router.get('/ride/:rideId', getReviewsByRideHandler);
 
-
 export default router;

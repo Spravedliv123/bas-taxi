@@ -4,6 +4,7 @@ dotenv.config();
 
 export const errorParams = {
     errors: {
+      validate: "Ошибка при валидации данных",
       dataNot: "Переданных данных недостаточно",
       dataIncorrect: "Введенные вами данные некорректны"
     }
