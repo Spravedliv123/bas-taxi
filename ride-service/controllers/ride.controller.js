@@ -46,7 +46,7 @@ import logger from "../utils/logger.js";
 
 export const requestRideHandler = async (req, res) => {
   try {
-    const { origin, destination, paymentType = "cash" } = req.body;
+    const { origin, destination, paymentType } = req.body;
     const passengerId = req.user.userId;
     const correlationId = req.correlationId;
 
@@ -233,7 +233,7 @@ export const createRideWithoutPassengerHandler = async (req, res) => {
 
 export const startRideByQRHandler = async (req, res) => {
   try {
-    const { driverId, origin, destination, paymentType = "cash" } = req.body;
+    const { driverId, origin, destination, paymentType } = req.body;
     const passengerId = req.user.userId;
     const correlationId = req.correlationId;
 
@@ -360,7 +360,7 @@ export const deactivateParkingModeHandler = async (req, res) => {
 
 export const getNearbyParkedDriversHandler = async (req, res) => {
   try {
-    const { latitude, longitude, radius = 5 } = req.query;
+    const { latitude, longitude, radius } = req.query;
 
     if (!latitude || !longitude) {
       return res
@@ -1094,7 +1094,7 @@ export const cancelRideIfPassengerNotArrivedHandler = async (req, res) => {
 export const createTariffHandler = async (req, res) => {
   const correlationId = req.headers["x-correlation-id"] || "none";
   const adminId = req.headers["x-admin-id"];
-  console.log("createTariffHandler", req.body);
+
   try {
     const requiredFields = [
       "cityId",
@@ -1184,7 +1184,7 @@ export const createTariffHandler = async (req, res) => {
 
 export const getDriverBalanceHandler = async (req, res) => {
   try {
-    const driverId = req.params.driverId || req.user?.driverId;
+    const driverId = req.user.driverId;
     const correlationId = req.correlationId;
 
     if (!driverId) {
