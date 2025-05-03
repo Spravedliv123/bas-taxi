@@ -2,22 +2,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const errorParams = {
-    errors: {
-      validate: "Ошибка при валидации данных",
-      dataNot: "Переданных данных недостаточно",
-      dataIncorrect: "Введенные вами данные некорректны"
-    }
-}
-
-export const validateUserInput = input => {
-  if (input === null || input === undefined || Number.isNaN(input) || input.length === 0 || input.length > 1024) {
-    return null
-  }
-
-  return input
-}
-
 const config = {
     port: process.env.PORT || 5000,
     rabbitmq: {
