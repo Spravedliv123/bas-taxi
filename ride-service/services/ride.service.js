@@ -113,7 +113,7 @@ export const requestRide = async (
       const activeRide = await Ride.findAll({
         where: {
           passengerId: passengerId,
-          status: { [Op.not]: ['completed', 'cancelled'] },
+          status: { [Op.not]: ["completed", "cancelled"] },
         },
       });
 
