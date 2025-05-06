@@ -1342,9 +1342,7 @@ export const getRideDetails = async (rideId, userOrDriverId, correlationId) => {
   try {
     logger.info("Запрос деталей поездки", { rideId, correlationId });
 
-    const ride = await Ride.findByPk(rideId, {
-      include: [{ model: Driver, as: "driver" }],
-    });
+    const ride = await Ride.findByPk(rideId);
 
     if (!ride) {
       logger.warn("Поездка не найдена", { rideId, correlationId });

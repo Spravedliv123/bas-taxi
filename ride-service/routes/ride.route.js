@@ -578,7 +578,11 @@ router.get("/car-classes", getCarClassesHandler);
  *       500:
  *         description: Не удалось получить данные о поездке
  */
-router.get("/:rideId", getRideDetailsHandler);
+router.get(
+  "/:rideId", 
+  authMiddleware(["driver", "passenger"]),
+  getRideDetailsHandler
+);
 
 /**
  * @swagger
@@ -745,7 +749,7 @@ router.get(
  *       500:
  *         description: Ошибка сервера
  */
-router.get(
+router.post(
   "/my-rides",
   authMiddleware(["driver", "passenger"]),
   getAllUserRidesHandler
@@ -765,7 +769,7 @@ router.get(
  *       500:
  *         description: Ошибка сервера
  */
-router.get(
+router.post(
   "/my",
   authMiddleware(["driver", "passenger"]),
   getAllUserRidesHandler
