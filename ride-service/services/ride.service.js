@@ -7,6 +7,7 @@ import Tariff from "../models/tarrif.model.js";
 import logger from "../utils/logger.js";
 import { assertExchange, getChannel } from "../utils/rabbitmq.js";
 import sequelize from "../utils/sequelize.js";
+import { Op } from "sequelize"
 import {
   getCityFromCoordinates,
   getDistanceAndDurationFromGeoService,
@@ -109,18 +110,18 @@ export const requestRide = async (
       }
       let destinationName = destinationNameRes.address.split(",")[0];
 
-      const activeRides = await Ride.findAll({
+      const activeRide = await Ride.findAll({
         where: {
           passengerId: passengerId,
-          status: "pending",
+          status: { [Op.not]: ['completed', 'cancelled'] },
         },
       });
 
-      if (!activeRides) {
-        throw new Error("Не удалось получить информацию об активных поездках");
+      if (!activeRide) {
+        throw new Error("Не удалось получить информацию об активной поездки");
       }
 
-      if (activeRides.length !== 0) {
+      if (activeRide.length !== 0) {
         throw new Error("Для создания новой поездки, завершите текущую");
       }
 
